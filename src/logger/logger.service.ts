@@ -9,6 +9,9 @@ export class LoggerService extends Logger {
     super(context);
     this.logStream = fs.createWriteStream('application.log', { flags: 'a' }); // Ghi log vào file application.log
   }
+  setContext(context: string) {
+    this.context = context;
+  }
 
   log(message: string) {
     // Ghi log thông thường
@@ -16,7 +19,7 @@ export class LoggerService extends Logger {
     this.writeLogToFile('LOG', message);
   }
 
-  error(message: string, trace: string) {
+  error(message: string, trace?: string) {
     // Ghi log lỗi
     super.error(message, trace);
     this.writeLogToFile('ERROR', `${message} - Trace: ${trace}`);

@@ -20,11 +20,13 @@ export class User extends BaseEntity {
     @Column()
     username: string;
 
+    @Column()  // Thêm cột mật khẩu
+    password: string;
+
     @OneToMany(() => PostEntity, post => post.user, { eager: true })
     @JoinColumn([{ name: 'postId', referencedColumnName: 'id' }])
     posts: PostEntity[];
 
-    // @CreateDateColumn() // UTC
     @Column()
     createdAt: Date;
 
@@ -43,17 +45,17 @@ export class User extends BaseEntity {
 
     @OneToMany(() => MessageEntity, message => message.sender)
     messages: MessageEntity[];
-  
+
     @OneToMany(() => Follow, follow => follow.follower)
     followings: Follow[];
-  
+
     @OneToMany(() => Follow, follow => follow.following)
     followers: Follow[];
-    
+
     totalPostCount: number;
-    
+
     followerCount: number;
-    
+
     followingCount: number;
-    
+
 }

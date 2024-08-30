@@ -7,7 +7,7 @@ import {
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ExtendedResponse, ListOutputValue, NON_PAGINATION } from '../config/constant';
+import { ExtendedResponse, ListOutputValue, NON_PAGINATION } from '../config/constants/page.constants';
 
 export const calcListTotalCount = (
   totalCount = 0,
