@@ -18,6 +18,3 @@ export const dataSourceOptions: DataSourceOptions = {
   synchronize: configService.get<boolean>('database.synchronize'),
 };
 
-const dataSource = new DataSource(dataSourceOptions);
-dataSource.initialize();
-export default dataSource;

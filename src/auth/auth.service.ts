@@ -18,7 +18,7 @@ export class AuthService {
     
     async signUp(authCredentialsDto: AuthCredentialDto): Promise<{ accessToken: string }> {
         const { email } = authCredentialsDto;
-        const user = await this.authRepository.findOne({ where: { email } });
+        const user = await this.authRepository.findOne( { email } );
         
         if (user) {
             this.logger.error(`Sign up Failed. ${email} account already exists in ${user.socialType}.`);
