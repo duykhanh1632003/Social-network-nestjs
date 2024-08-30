@@ -1,5 +1,6 @@
-import { Global, Module } from "@nestjs/common";
+import { Global, MiddlewareConsumer, Module, NestModule, RequestMethod } from "@nestjs/common";
 import { LoggerService } from "./logger.service";
+import { LoggerMiddleware } from "src/Middlewares/logger.middleware";
 
 @Global()
 @Module({
@@ -7,4 +8,9 @@ import { LoggerService } from "./logger.service";
     exports: [LoggerService]
 })
 
-export class LoggerModule {}
+export class LoggerModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(LoggerMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
+
+    }
+}
