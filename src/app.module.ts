@@ -6,11 +6,11 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './Modules/users/users.module';
 import { ConfigsModule } from './config/configuration/config.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypeOrmConfigService } from './db/typeorm.service';
+import { dataSourceOptions } from './db/database.providers';
 
 @Module({
   imports: [LoggerModule, ConfigsModule, AuthModule, UsersModule,
-    TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService })
+    TypeOrmModule.forRoot(dataSourceOptions)
   ],
   controllers: [],
   providers: [

@@ -12,7 +12,7 @@ export class CommentEntity extends BaseEntity {
     @Column()
     content: string
 
-    @Column({ type: 'enum', enum: CommentType })
+    @Column({ type: 'enum', enum: CommentType,default: CommentType.Comment })
     type: CommentType
 
     @Column({ nullable: true })

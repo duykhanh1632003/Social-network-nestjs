@@ -1,4 +1,8 @@
 // src/config/configuration.ts
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { config } from 'dotenv';
+config();
+
 export default () => ({
   port: parseInt(process.env.PORT, 10) || 3000,
   mongoUri: process.env.MONGO_URI,
@@ -17,7 +21,7 @@ export default () => ({
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT, 10) || 5432,
     username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
+    password: process.env.DB_PASSWORD || 'dellcomk',
     database: process.env.DB_DATABASE,
     entities: ['dist/**/*.entity{.ts,.js}'],
     logging: 'all',
