@@ -10,8 +10,8 @@ import { AuthRepository } from './repo/auth.repository';
 import { User } from 'src/db/entity/user.entity';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
+    TypeOrmModule.forFeature([User]),
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
@@ -22,7 +22,7 @@ import { User } from 'src/db/entity/user.entity';
     TypeOrmModule.forFeature([AuthRepository])
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy,AuthRepository],
   exports: [JwtStrategy, PassportModule]
 })
 export class AuthModule {}

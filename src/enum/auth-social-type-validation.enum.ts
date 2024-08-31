@@ -1,3 +1,5 @@
 export enum AuthSocialType {
-    GOOGLE= "GOOGLE"
+    GOOGLE = "GOOGLE",
+    FACEBOOK = "FACEBOOK",
+    TWITTER = "TWITTER"
 }

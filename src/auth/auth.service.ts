@@ -8,7 +8,6 @@ import { AuthCredentialDto } from './dto/auth-credential.dto';
 @Injectable()
 export class AuthService {
     constructor(
-        @InjectRepository(AuthRepository)
         private readonly authRepository: AuthRepository,
         private readonly jwtService: JwtService,
         private readonly logger: LoggerService // Directly inject LoggerService
