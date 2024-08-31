@@ -5,7 +5,7 @@ import { AuthCredentialDto } from "../dto/auth-credential.dto";
 import * as moment from 'moment-timezone';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
-import { ConflictException, Injectable, InternalServerErrorException } from "@nestjs/common";
+import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
@@ -17,16 +17,21 @@ export class AuthRepository {
     this.logger.setContext('AuthRepository');
   }
 
-  async createUser(authCredentialsDto: AuthCredentialDto): Promise<void> {
-    console.log("da vao day")
+  async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt();
+    return bcrypt.hash(password, salt);
+  }
 
+  async validatePassword(password: string, hashedPassword: string): Promise<boolean> {
+    return bcrypt.compare(password, hashedPassword);
+  }
+
+  async createUser(authCredentialsDto: AuthCredentialDto): Promise<void> {
     const { username, socialType, email, password } = authCredentialsDto;
     const createdAt = moment().tz('Asia/VietNam').format('YYYY-MM-DD HH:mm:ss.SSS');
     const uuid = uuidv4();
 
-    // Hash the password
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt)
+    const hashedPassword = await this.hashPassword(password); // Hash password
 
     const user = this.userRepository.create({
       uuid,

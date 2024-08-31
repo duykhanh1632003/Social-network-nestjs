@@ -23,6 +23,6 @@ import { User } from 'src/db/entity/user.entity';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy,AuthRepository],
-  exports: [JwtStrategy, PassportModule]
+  exports: [JwtStrategy, PassportModule, JwtModule]
 })
 export class AuthModule {}

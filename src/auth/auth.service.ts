@@ -1,5 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoggerService } from 'src/logger/logger.service';
 import { AuthRepository } from './repo/auth.repository';
 import { JwtService } from '@nestjs/jwt';
@@ -28,6 +27,19 @@ export class AuthService {
         const accessToken = this.jwtService.sign({ email });
 
         // Return the access token wrapped in an object
+        return { accessToken };
+    }
+
+    async signIn(authCredentialsDto: AuthCredentialDto): Promise<{ accessToken: string }> {
+        const { email, password } = authCredentialsDto;
+        const user = await this.authRepository.findOne({ email });
+
+        if (!user || !(await this.authRepository.validatePassword(password, user.password))) {
+            this.logger.error(`Sign in Failed. Invalid credentials for ${email}`);
+            throw new UnauthorizedException('Invalid credentials');
+        }
+
+        const accessToken = this.jwtService.sign({ email });
         return { accessToken };
     }
 }
