@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { LoggerModule } from './logger/logger.module';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './Modules/users/users.module';
@@ -10,6 +10,7 @@ import { dataSourceOptions } from './db/database.providers';
 import { HealthController } from './health.controller';
 import { SuccessResponseInterceptor } from './interceptors/success-response.interceptor';
 import { ErrorsFilter } from './filters/errors.filter';
+import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
 
 @Module({
   imports: [LoggerModule, ConfigsModule, AuthModule, UsersModule,
@@ -29,6 +30,10 @@ import { ErrorsFilter } from './filters/errors.filter';
       provide: APP_FILTER,
       useClass: ErrorsFilter,
     },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    }
   ],
 
 })
