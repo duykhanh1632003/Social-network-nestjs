@@ -6,7 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './Modules/users/users.module';
 import { ConfigsModule } from './config/configuration/config.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { dataSourceOptions } from './db/database.providers';
+import { dataSourceOptions } from './db/data-source';
 import { HealthController } from './health.controller';
 import { SuccessResponseInterceptor } from './interceptors/success-response.interceptor';
 import { ErrorsFilter } from './filters/errors.filter';
