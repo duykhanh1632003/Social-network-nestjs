@@ -16,6 +16,7 @@ export default () => ({
   firebaseProjectId: process.env.FIREBASE_PROJECT_ID,
   firebaseClientEmail: process.env.FIREBASE_CLIENT_EMAIL,
   firebasePrivateKey: process.env.FIREBASE_PRIVATE_KEY,
+  serverUrl: process.env.SERVER_URL,
   database: {
     type: 'postgres',
     host: process.env.DB_HOST,

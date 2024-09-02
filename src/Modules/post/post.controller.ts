@@ -19,7 +19,7 @@ export class PostController {
     status: 200,
     description: 'Success'
   })
-  @ApiConsumes('mutilpart/form-data')
+  @ApiConsumes('multipart/form-data')
   @ApiBody({ type: CreatePostDto })
   @ApiOperation({ summary: 'Create a new post' })
   @UseInterceptors(
@@ -38,10 +38,12 @@ export class PostController {
     @UploadedFile() files: Array<Express.Multer.File>,
   ): Promise<PostInfoDto> {
     const imageUrls = files.map(
-      (file) => `${this.configService.get('SERVER_URL')}/images/${file.filename}`,
+      (file) => `${this.configService.get<string>('SERVER_URL')}/images/${file.filename}`,
     );
 
     return this.postService.createPost(createPostDto, user, imageUrls);
   }
+
+  
 
 }
