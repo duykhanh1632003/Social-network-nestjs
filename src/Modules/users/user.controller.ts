@@ -1,5 +1,5 @@
 import { Controller, Get, UseGuards } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "src/auth/passport/jwt-auth.guard";
 import { LoggerService } from './../../logger/logger.service';
 import { UsersService } from "./users.service";
@@ -29,6 +29,7 @@ export class UserController {
         this.logger.verbose(`User ${user.email} trying to get own information.`);
         return this.userService.getUserInfo(user.email);
     }
+    
     
 
 }

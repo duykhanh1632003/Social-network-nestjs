@@ -35,7 +35,11 @@ export class UserRepository  {
       .groupBy('user.email')
       .getOne()
     
-    const post = this.postRepo.createQueryBuilder('user').where('user.email = :email', { email }).leftJoinAndSelect('user.posts', 'post', 'post.status =:status', { status: PostStatus.PUBLIC }).select('COUNT(post.id)', 'totalPostCount')
+    const post = this.userRepo
+      .createQueryBuilder('user')
+      .where('user.email = :email', { email })
+      .leftJoinAndSelect('user.posts', 'post', 'post.status =:status', { status: PostStatus.PUBLIC })
+      .select('COUNT(post.id)', 'totalPostCount')
     
     const [{ totalPostCount }] = await post.getRawMany();
 
@@ -54,6 +58,6 @@ export class UserRepository  {
         throw new NotFoundException(`User not found`);
     }
   }
-
+  
   
 }

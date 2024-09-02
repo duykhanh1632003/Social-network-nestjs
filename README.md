@@ -32,6 +32,14 @@
 $ npm install
 ```
 
+
+```````` create  ew 
+$ mkdir -p src/Modules/following
+$ nest g resource follow --no-spec
+$ mv src/follow/* src/Modules/following/
+$ rm -r src/follow
+````````
+
 ## Compile and run the project
 
 ```bash
