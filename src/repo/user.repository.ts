@@ -3,7 +3,7 @@ import { LoggerService } from "src/logger/logger.service";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { UserInfoDto } from "src/auth/dto/user/user-info.dto";
+import { UserInfoDto } from "src/dto/user/user-info.dto";
 import { PostEntity } from "src/db/entity/post.entity";
 import { PostStatus } from "src/enum/post-status.enum";
 
@@ -58,6 +58,6 @@ export class UserRepository  {
         throw new NotFoundException(`User not found`);
     }
   }
-  
+
   
 }

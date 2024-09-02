@@ -2,7 +2,7 @@ import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/co
 import { LoggerService } from 'src/logger/logger.service';
 import { AuthRepository } from '../repo/auth.repository';
 import { JwtService } from '@nestjs/jwt';
-import { AuthCredentialDto } from './dto/auth-credential.dto';
+import { AuthCredentialDto } from '../dto/auth/auth-credential.dto';
 
 @Injectable()
 export class AuthService {

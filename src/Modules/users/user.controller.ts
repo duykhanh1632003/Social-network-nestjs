@@ -3,9 +3,9 @@ import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "src/auth/passport/jwt-auth.guard";
 import { LoggerService } from './../../logger/logger.service';
 import { UsersService } from "./users.service";
-import { UserInfoDto } from "src/auth/dto/user/user-info.dto";
-import { GetUser } from "src/auth/decorator/get-user.decorator";
+import { UserInfoDto } from "src/dto/user/user-info.dto";
 import { User } from "src/db/entity/user.entity";
+import { GetUser } from "src/decorator/get-user.decorator";
 
 @ApiTags('USER')
 @Controller('user')

@@ -1,7 +1,7 @@
 import { Body, Controller, Post, UseGuards, ValidationPipe, Request } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { AuthCredentialDto } from './dto/auth-credential.dto';
+import { AuthCredentialDto } from '../dto/auth/auth-credential.dto';
 import { LocalAuthGuard } from './passport/local-auth.guard';
 import { Public } from 'src/decorator/customize';
 
