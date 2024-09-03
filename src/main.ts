@@ -3,9 +3,9 @@ import { SwaggerModule, DocumentBuilder, SwaggerCustomOptions } from '@nestjs/sw
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
-import { SocketIoAdapter } from './chatroom/socket-io.adapters';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { SocketIoAdapter } from './Modules/chatroom/socket-io.adapters';
 
 
 async function bootstrap() {

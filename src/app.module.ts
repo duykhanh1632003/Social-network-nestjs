@@ -13,11 +13,13 @@ import { ErrorsFilter } from './filters/errors.filter';
 import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
 import { FollowModule } from './Modules/follow/follow.module';
 import { PostModule } from './Modules/post/post.module';
+import { ChatroomModule } from './Modules/chatroom/chatroom.module';
 
 @Module({
   imports: [LoggerModule, ConfigsModule, AuthModule, UsersModule,FollowModule,
     TypeOrmModule.forRoot(dataSourceOptions),
     PostModule,
+    ChatroomModule,
     
   ],
   controllers: [HealthController],

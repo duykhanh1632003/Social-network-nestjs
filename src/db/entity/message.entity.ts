@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { ChatRoomEntity } from "./chatroom.entity";
 import { User } from "./user.entity";
 import { MessageType } from "src/enum/message-type";
@@ -7,10 +7,10 @@ import { MessageType } from "src/enum/message-type";
 export class MessageEntity {
 
     @PrimaryGeneratedColumn()
-    id: number
+    id: number;
 
     @Column()
-    content: string
+    content: string;
 
     @ManyToOne(() => ChatRoomEntity, (chatroom) => chatroom.messages)
     chatRoom: ChatRoomEntity;
@@ -18,10 +18,10 @@ export class MessageEntity {
     @ManyToOne(() => User, (user) => user.messages)
     sender: User;
 
-    @Column()
+    @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
 
-    @Column()
+    @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
 
     @Column()

@@ -8,7 +8,6 @@ import { PostEntity } from 'src/db/entity/post.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([]),
     TypeOrmModule.forFeature([
       User,
       PostEntity,
