@@ -30,6 +30,4 @@ export class UserController {
         return this.userService.getUserInfo(user.email);
     }
     
-    
-
 }

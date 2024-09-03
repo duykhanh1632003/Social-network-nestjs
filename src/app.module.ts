@@ -14,12 +14,16 @@ import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
 import { FollowModule } from './Modules/follow/follow.module';
 import { PostModule } from './Modules/post/post.module';
 import { ChatroomModule } from './Modules/chatroom/chatroom.module';
+import { CommentModule } from './Modules/comment/comment.module';
+import { MessageModule } from './Modules/message/message.module';
 
 @Module({
   imports: [LoggerModule, ConfigsModule, AuthModule, UsersModule,FollowModule,
     TypeOrmModule.forRoot(dataSourceOptions),
     PostModule,
     ChatroomModule,
+    CommentModule,
+    MessageModule,
     
   ],
   controllers: [HealthController],

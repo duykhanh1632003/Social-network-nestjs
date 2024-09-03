@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Query, ParseIntPipe } from '@nestjs/common';
 import { PostService } from './post.service';
 import { ConfigService } from '@nestjs/config';
-import { ApiBody, ApiConsumes, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PostInfoDto, PostResponse } from 'src/dto/post/post-info.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -11,6 +11,7 @@ import { editFileName, imageFileFilter } from 'src/lib/multerOptions';
 import { CreatePostDto } from 'src/dto/post/create-post.dto';
 
 @Controller('post')
+@ApiTags('Post')
 export class PostController {
   constructor(private readonly postService: PostService, private readonly configService: ConfigService) {}
 

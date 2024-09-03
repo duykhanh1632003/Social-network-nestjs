@@ -1,12 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { FollowService } from './follow.service';
-import { ApiBody, ApiOperation, ApiProperty, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiProperty, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { EmailDto } from 'src/dto/user/email.dto';
 import { GetUser } from 'src/decorator/get-user.decorator';
 import { User } from 'src/db/entity/user.entity';
 import { SingleIntegerDto } from 'src/dto/follow/single-integer.dto';
 
 @Controller('follow')
+@ApiTags('Follow')
 export class FollowController {
   constructor(private readonly followService: FollowService) {}
 
