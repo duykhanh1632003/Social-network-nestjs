@@ -36,7 +36,7 @@ export class FollowRepository  {
     
     return result.count > 0;
   }
-
+ 
   async getFollowerCount(email: string): Promise<number> {
     return this.followRepo
         .createQueryBuilder('follow')
@@ -51,5 +51,6 @@ export class FollowRepository  {
         .leftJoinAndSelect('follow.follower', 'follower')
         .where('follower.email = :email', { email })
         .getCount();
-    }
+  }
+  
 }

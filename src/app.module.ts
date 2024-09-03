@@ -45,6 +45,5 @@ import { MessageModule } from './Modules/message/message.module';
       useClass: JwtAuthGuard,
     }
   ],
-
 })
 export class AppModule {}

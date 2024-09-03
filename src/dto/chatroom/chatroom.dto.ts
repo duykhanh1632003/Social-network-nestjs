@@ -12,19 +12,19 @@ export class ChatRoomDto {
     id: number;
     
     @ApiProperty({
-        example: "John",
+        example: "khanh",
         description: `Chatroom's name`,
     })
     name: string;
     
     @ApiProperty({
-        example: "Lorem ipsum",
+        example: "khanh",
         description: `Chatroom's last message`,
     })
     latestMessage: string;
     
     @ApiProperty({
-        example: [`john@gmai.com`, `smith@gmai.com`],
+        example: [`khanh@gmai.com`, `duong@gmai.com`],
         description: `Participants' email addresses`,
     })
     participants: string[];

@@ -108,4 +108,25 @@ export class PostRepository  {
     })
     return { posts: postList, total };
   }
+
+  async postBookMark(email: string, postId: number): Promise<string[]> {
+    const post = await this.postRepo.findOne({
+      where: { id : postId }
+    })
+    if (post) {
+      if (!post.bookMarkedUsers.includes(email)) {
+        post.bookMarkedUsers.push(email)
+      }
+      else {
+        post.bookMarkedUsers = post.bookMarkedUsers.filter((like) => like !== email);
+    }
+    await this.postRepo.save(post)
+      return post.bookMarkedUsers;
+    }
+    else {
+      throw new NotFoundException(`Can't find Post with id ${postId}`);
+    }
+    
+  }
+  
 }

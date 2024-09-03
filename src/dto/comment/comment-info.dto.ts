@@ -12,7 +12,7 @@ export class CommentInfoDto {
     id: number;
     
     @ApiProperty({
-      example: 'Lorem ipsum',
+      example: 'khanh',
       description: `The comment's content`,
     })
     content: string;
@@ -30,7 +30,7 @@ export class CommentInfoDto {
     parentCommentId: number;
     
     @ApiProperty({
-        example: 'john@gmail.com',
+        example: 'khanh@gmail.com',
         description: `The email of the parent comment's author for this reply. It can be null.`,
     })
     parentCommentAuthor: string;
@@ -43,7 +43,7 @@ export class CommentInfoDto {
     postId: number;
       
     @ApiProperty({
-        example: `john@gmail.com`,
+        example: `khanh@gmail.com`,
         description: `The email of its author.`,
     })
     @IsNotEmpty()
@@ -72,8 +72,10 @@ export class CommentInfoDto {
 }
 
 export class CommentInfoListDto {
+    
     @ApiProperty({ type: [CommentInfoDto] })
     comments: CommentInfoDto[];
+
     @ApiProperty({
         example: 10,
         description: `The comment's total count can call`,
