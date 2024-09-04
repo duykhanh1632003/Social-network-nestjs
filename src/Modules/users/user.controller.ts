@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBody, ApiConsumes, ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "src/auth/passport/jwt-auth.guard";
 import { LoggerService } from './../../logger/logger.service';
@@ -9,6 +9,12 @@ import { GetUser } from "src/decorator/get-user.decorator";
 import { UserInfoIncludingIsFollowingDto } from "src/dto/user/user-info-including-isfollowing.dto";
 import { PostIdDto } from "src/dto/post/post-id.dto";
 import { UpdatedUserThumbnailDto } from "src/dto/user/updated-user-thumbnail.dto";
+import { diskStorage } from "multer";
+import { editFileName, imageFileFilter } from "src/lib/multerOptions";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { ConfigService } from "@nestjs/config";
+import { StatusMessageDto } from "src/dto/user/status-message.dto";
+import { UserListDto } from "src/dto/user/user-list.dto";
 
 @ApiTags('USER')
 @Controller('user')
@@ -16,7 +22,8 @@ import { UpdatedUserThumbnailDto } from "src/dto/user/updated-user-thumbnail.dto
 export class UserController {
     constructor(
         private readonly logger: LoggerService,
-        private readonly userService: UsersService
+        private readonly userService: UsersService,
+        private readonly configService: ConfigService
     ) { }
     
     /// Get my user information
@@ -70,6 +77,99 @@ export class UserController {
         return this.userService.postBookMark(user.email, postIdDto.postId);
     }
 
+  @ApiResponse({
+    type: UpdatedUserThumbnailDto,
+    status: 200,
+    description: 'Success',
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'User thumbnail',
+        },
+      },
+    },
+  })
+  @ApiOperation({ summary: 'Update user thumbnail' })
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './static/images',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  @Patch('thumbnail')
+  updateUserThumbnail(
+    @GetUser() user: User,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<UpdatedUserThumbnailDto> {
+    return this.userService.updateUserThumbnail(
+      user.email,
+      `${this.configService.get<string>('serverUrl')}/images/${file.filename}`,
+    );
+    }
+    
+    @ApiResponse({
+        status: 200,
+        description: "SUccess"
+    })
+    @ApiOperation({ summary: "Delete the user thumbnail"})
+    @Delete("/thumbnail")
+    deleteThumbnail(
+        @GetUser() user: User,
+    ): Promise<UpdatedUserThumbnailDto> {
+        return this.userService.deleteThumbnail(user);
+    }
 
+    @ApiResponse({
+        status: 200,
+        description: "Success"
+    })
+    @ApiBody({ type: StatusMessageDto })
+    @ApiOperation({ summary: `Update user's status message` })
+    @Patch('/statusMessage')
+    updateStatusMessage(
+        @GetUser() user: User,
+        @Body() statusMessageDto: StatusMessageDto
+    ): Promise<void> {
+        return this.userService.updateStatusMessage(user.email, statusMessageDto.statusMessage)
+    }
 
-}
+    @ApiResponse({
+        type: UserListDto,
+        status: 200,
+        description: "Success"
+    })
+    @ApiQuery({
+        name: "keyword",
+        example: "Khanh",
+        description: "User name search"
+    })
+    @ApiQuery({
+        name: "page",
+        example: "1",
+        description: "Page of the list user"
+    })
+    @ApiQuery({
+        name: "limit",
+        example: "10",
+        description: "Limit user per page"
+    })
+    @ApiOperation({ summary: "Find user" })
+    @Get("/search/user")
+    getUserListByKeyWord(
+        @GetUser() user: User,
+        @Query("keyword") keyword: string,
+        @Query("page") page: number,
+        @Query('limit') limit: number
+    ): Promise<UserListDto> {
+        return this.userService.getUserListByKeyWord(user,keyword, page, limit)
+    }
+}   

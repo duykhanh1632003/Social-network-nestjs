@@ -1,7 +1,7 @@
 import { LoggerService } from "src/logger/logger.service";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Injectable, NotFoundException, Post } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { PostEntity } from "src/db/entity/post.entity";
 import { ConfigService } from "@nestjs/config";
 import { User } from "src/db/entity/user.entity";

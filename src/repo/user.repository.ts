@@ -1,12 +1,13 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "src/db/entity/user.entity";
 import { LoggerService } from "src/logger/logger.service";
 import { UserInfoDto } from "src/dto/user/user-info.dto";
-import { PostEntity } from "src/db/entity/post.entity";
 import { PostStatus } from "src/enum/post-status.enum";
 import { BookMarksDto } from "src/dto/user/book-marks.dto";
+import { UpdatedUserThumbnailDto } from "src/dto/user/updated-user-thumbnail.dto";
+import { UserListDto } from "src/dto/user/user-list.dto";
 
 @Injectable()
 export class UserRepository {
@@ -88,4 +89,67 @@ export class UserRepository {
 
     return { bookMarks };
   }
+
+  async updateUserThumbnail(email: string, newThumbnailUrl: string): Promise<UpdatedUserThumbnailDto> {
+    const user = await this.userRepo.findOne({ where: { email: email } })
+    
+    if (!user) {
+      throw new BadRequestException("User not found")
+    }
+    user.thumbnail = newThumbnailUrl
+    await this.userRepo.save(user)
+    
+    const updatedUserThumbnailDto = new UpdatedUserThumbnailDto();
+    updatedUserThumbnailDto.updatedThumbnail = user.thumbnail;
+    return updatedUserThumbnailDto
+  }
+
+  async deleteThumbnail(user: User): Promise<UpdatedUserThumbnailDto> {
+    const defaultThumbnail = "https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/03/17/trend-avatar-1.jpg";
+    user.thumbnail = defaultThumbnail
+    await this.userRepo.save(user)
+
+    const updatedUserThumbnailDto = new UpdatedUserThumbnailDto()
+    updatedUserThumbnailDto.updatedThumbnail = user.thumbnail
+    return updatedUserThumbnailDto
+  }
+
+  async updateStatusMessage(email: string, newStatusMessage: string): Promise<void> {
+    const user = await this.userRepo.findOne({ where: { email: email } })
+    if (user) {
+      user.statusMessage = newStatusMessage
+      this.userRepo.save(user)
+    }
+    else {
+      throw new BadRequestException("Not found user")
+    }
+    
+  }
+
+  async getUserListByKeyWord(
+    user: User,
+    keyword: string,
+    page: number,
+    limit: number
+): Promise<UserListDto> {
+    const { email } = user;
+
+    const [users, total] = await this.userRepo.createQueryBuilder('user')
+        .select(['user.email', 'user.username', 'user.thumbnail', 'user.statusMessage'])
+        .where('user.username LIKE :keyword', { keyword: `%${keyword}%` })
+        .andWhere('user.email <> :email', { email })
+        .skip((page - 1) * limit)
+        .take(limit)
+        .getManyAndCount();
+
+    const userList = users.map(({ email, username, thumbnail, statusMessage }) => ({
+        email,
+        username,
+        thumbnail,
+        statusMessage
+    }));  
+
+    return { userList, total };
+}
+
 }
