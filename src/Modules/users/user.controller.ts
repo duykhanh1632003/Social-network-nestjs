@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
-import { ApiBody, ApiConsumes, ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "src/auth/passport/jwt-auth.guard";
 import { LoggerService } from './../../logger/logger.service';
 import { UsersService } from "./users.service";
@@ -172,4 +172,7 @@ export class UserController {
     ): Promise<UserListDto> {
         return this.userService.getUserListByKeyWord(user,keyword, page, limit)
     }
+
+    
+    
 }   
