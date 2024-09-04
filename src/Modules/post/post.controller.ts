@@ -155,5 +155,36 @@ export class PostController {
         @GetUser() user: User
     ): Promise<void> {
         return this.postService.deletePost(id,user)
-    }
+  }
+  
+   @ApiResponse({
+        status: 200,
+        description: "Success"
+    })
+    @ApiOperation({ summary: `Modify the post status` })
+    @Patch('/:id/status')
+    updatePostStatus(
+        @GetUser() user: User,
+        @Param('id', ParseIntPipe) id: number
+    ): Promise<void> {
+        return this.postService.updatePostStatus(user.email, id )
+  }
+  
+  @ApiResponse({
+    status: 201,
+    description: "Success"
+  })
+  @ApiQuery({
+    name: "email",
+    description: "The email address of the writer of the dummy post; it can be null",
+    required: true,
+    allowEmptyValue: true
+  })
+  @ApiOperation({ summary: 'Create 10 dummy posts' })
+  @Post("/test/dummy")
+  createDummyPosts(
+    @Query('email') email: string
+  ): Promise<void> {
+    return this.postService.createDummyPosts(email)
+  }
 }

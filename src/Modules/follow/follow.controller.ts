@@ -5,6 +5,7 @@ import { EmailDto } from 'src/dto/user/email.dto';
 import { GetUser } from 'src/decorator/get-user.decorator';
 import { User } from 'src/db/entity/user.entity';
 import { SingleIntegerDto } from 'src/dto/follow/single-integer.dto';
+import { UserListDto } from 'src/dto/user/user-list.dto';
 
 @Controller('follow')
 @ApiTags('Follow')
@@ -65,4 +66,35 @@ export class FollowController {
     return this.followService.getFollowingCount(user.email);
   }
 
+  @ApiResponse({
+    type: UserListDto,
+    status: 200,
+    description: 'SUccess'
+  })
+  @ApiQuery({
+    name: 'email',
+    description: `User's email address to fetch`,
+    required: true
+  })
+  @ApiProperty({
+    name: 'page',
+    description: `The page's number to call`,
+    required: true
+  })
+  @ApiProperty({
+    name: 'limit',
+    description: `The number of items on a single page`,
+    required: true
+  })
+  @ApiOperation({ summary: "Get follower list" })
+  @Get('/follower')
+  getFollowerList(
+    @Query('email') email: string,
+    @Query('page') page: number,
+    @Query('limit') limit: number
+  ): Promise<UserListDto> {
+    return this.followService.getFollowerList(email, page, limit);
+  }
+
+  
 }

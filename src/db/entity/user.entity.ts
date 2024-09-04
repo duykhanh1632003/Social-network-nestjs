@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, OneToMany, Unique } from "typeorm";
 import { PostEntity } from "./post.entity";
 import { Follow } from "./follow.entity";
 import { MessageEntity } from "./message.entity";

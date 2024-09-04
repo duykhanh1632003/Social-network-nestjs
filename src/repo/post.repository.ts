@@ -314,7 +314,11 @@ export class PostRepository  {
     // Delete the post
     await this.postRepo.delete(id);
   }
-  
 
+  async updatePostStatus(email: string, id: number): Promise<void> {
+    const post = await this.getPostById(email, id)
+    post.status = post.status == PostStatus.PUBLIC ? PostStatus.PRIVATE : PostStatus.PUBLIC;
+    await this.postRepo.save(post);
+  }
   
 }

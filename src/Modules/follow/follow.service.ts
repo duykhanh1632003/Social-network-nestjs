@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/db/entity/user.entity';
 import { SingleIntegerDto } from 'src/dto/follow/single-integer.dto';
+import { UserListDto } from 'src/dto/user/user-list.dto';
 import { AuthRepository } from 'src/repo/auth.repository';
 import { FollowRepository } from 'src/repo/follow.repository';
 
@@ -31,4 +32,9 @@ export class FollowService {
     async getFollowingCount(email: string): Promise<number> {
         return await this.followRepository.getFollowingCount(email);
     }
+
+    async getFollowerList(email: string,  page: number, limit: number): Promise<UserListDto> {
+        return await this.followRepository.getFollowerList(email , page , limit);
+    }
+    
 }

@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostEntity } from 'src/db/entity/post.entity';
 import { PostRepository } from 'src/repo/post.repository';
 import { User } from 'src/db/entity/user.entity';
+import { AuthRepository } from 'src/repo/auth.repository';
 
 @Module({
   imports: [
@@ -13,10 +14,10 @@ import { User } from 'src/db/entity/user.entity';
     dest: "./static/images",
     limits: { fieldSize: 100000000 }
     }),
-    TypeOrmModule.forFeature([PostEntity,PostRepository,User])
+    TypeOrmModule.forFeature([PostEntity,PostRepository,User,AuthRepository])
   ],
   controllers: [PostController],
-  providers: [PostService, PostRepository],
+  providers: [PostService, PostRepository,AuthRepository],
   exports: [PostRepository, PostModule]
 })
 export class PostModule {}
