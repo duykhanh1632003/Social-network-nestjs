@@ -15,7 +15,7 @@ export class UserInfoDto {
   username: string;
 
   @ApiProperty({
-    example: 'localhost:3000/public/images/default_thumbnail.png',
+    example: 'https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/03/17/trend-avatar-1.jpg',
     description: `User's thumbnail url`,
   })
   thumbnail: string;

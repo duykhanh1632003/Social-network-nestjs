@@ -118,7 +118,7 @@ export class UserController {
     
     @ApiResponse({
         status: 200,
-        description: "SUccess"
+        description: "Success"
     })
     @ApiOperation({ summary: "Delete the user thumbnail"})
     @Delete("/thumbnail")
