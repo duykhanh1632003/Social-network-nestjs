@@ -70,7 +70,7 @@ export class FollowRepository  {
             return userInfo;
         });
 
-        return { userList, total };
-    
+    return { userList, total };
+
   }
 } 

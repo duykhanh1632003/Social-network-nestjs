@@ -7,13 +7,11 @@ import { PostLikeCountDto } from 'src/dto/post/post-like-count.dto';
 import { UpdatePostDescriptionDto } from 'src/dto/post/update-post-description.dto';
 import { AuthRepository } from 'src/repo/auth.repository';
 import { PostRepository } from 'src/repo/post.repository';
-import { UserRepository } from 'src/repo/user.repository';
 
 @Injectable()
 export class PostService {
   constructor(
     private readonly postRepository: PostRepository,
-    private readonly userRepository: UserRepository,
     private readonly authRepository: AuthRepository,
 
   ) { }

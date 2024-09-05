@@ -7,34 +7,34 @@ import { User } from "./user.entity";
 export class CommentEntity extends BaseEntity {
 
     @PrimaryGeneratedColumn()
-    id: number
+    id: number;
 
     @Column()
-    content: string
+    content: string;
 
-    @Column({ type: 'enum', enum: CommentType,default: CommentType.Comment })
-    type: CommentType
-
-    @Column({ nullable: true })
-    parentCommendId: number
+    @Column({ type: 'enum', enum: CommentType, default: CommentType.Comment })
+    type: CommentType;
 
     @Column({ nullable: true })
-    parentCommentAuthor: string
+    parentCommentId: number;  // Sửa lại từ parentCommendId
+
+    @Column({ nullable: true })
+    parentCommentAuthor: string;
 
     @ManyToOne(() => CommentEntity, comment => comment.childComments)
-    @JoinColumn({ name: 'parentCommendId' })
+    @JoinColumn({ name: 'parentCommentId' })
     parentComment: CommentEntity;
 
     @OneToMany(() => CommentEntity, comment => comment.parentComment)
-    childComments: CommentEntity[]
+    childComments: CommentEntity[];
 
     @ManyToOne(() => PostEntity, (post) => post.comments, { eager: false })
     @JoinColumn([{ name: 'postId', referencedColumnName: 'id' }])
-    post: PostEntity
+    post: PostEntity;
 
     @ManyToOne(() => User, (user) => user.posts, { eager: false })
     @JoinColumn([{ name: 'userEmail', referencedColumnName: 'email' }])
-    user: User
+    user: User;
 
     @Column()
     createdAt: Date;
