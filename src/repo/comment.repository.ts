@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import moment from "moment";
 import { CommentEntity } from "src/db/entity/comment.entity";
@@ -6,6 +6,7 @@ import { PostEntity } from "src/db/entity/post.entity";
 import { User } from "src/db/entity/user.entity";
 import { CommentInfoDto, CommentInfoListDto } from "src/dto/comment/comment-info.dto";
 import { CreateCommentDto } from "src/dto/comment/create-comment.dto";
+import { UpdateCommentDto } from "src/dto/comment/update-comment.dto";
 import { UserSimpleInfoDto } from "src/dto/user/user-simple-info.dto";
 import { CommentType } from "src/enum/comment-typ.enum";
 import { LoggerService } from "src/logger/logger.service";
@@ -137,6 +138,58 @@ export class CommentRepository {
     });
         
     return { comments: commentList, total };
+  }
+
+  async updateComment(updateCommentDto: UpdateCommentDto, user: User): Promise<CommentInfoDto> {
+    const { id, content } = updateCommentDto;
+    const comment = await this.commentRepo.findOne({
+    where: { id },
+    relations: ['user', 'post', 'childComments'],
+  });
+
+
+    if (!comment) {
+      throw new NotFoundException(`Comment with id ${id} not found`);
+    }
+
+    if (comment.user.email !== user.email) {
+      throw new UnauthorizedException('You do not have permission to update this comment');
+    }
+
+    // Update the content and updatedAt timestamp
+    const updatedAt = moment().tz('Asia/VietNam').format('YYYY-MM-DD HH:mm:ss.SSS');
+    comment.content = content;
+    comment.updatedAt = new Date(updatedAt);
+
+    // Save the updated comment
+    await this.commentRepo.save(comment);
+
+    // Map the updated comment to CommentInfoDto
+    const updatedComment = new CommentInfoDto();
+    updatedComment.id = comment.id;
+    updatedComment.content = comment.content;
+    updatedComment.type = comment.type;
+    updatedComment.parentCommentId = comment.parentCommentId;
+    updatedComment.parentCommentAuthor = comment.parentCommentAuthor;
+    updatedComment.postId = comment.post.id;
+    updatedComment.user = new UserSimpleInfoDto();
+    updatedComment.user.email = comment.user.email;
+    updatedComment.user.thumbnail = comment.user.thumbnail;
+    updatedComment.user.username = comment.user.username;
+    updatedComment.createdAt = comment.createdAt;
+    updatedComment.updatedAt = comment.updatedAt;
+    updatedComment.childrenCount = comment.childComments.length;
+
+    return updatedComment;
+  }
+
+  async deleteComment(id: number, user: User): Promise<void> {
+    const result = await this.commentRepo.delete({ id, user })
+    if (result.affected === 0) {
+      this.logger.error(`Can't find comment with id ${id}`);
+      throw new NotFoundException(`Can't find comment with id ${id}`);
+    }
+    this.logger.verbose(`result ${result}`);
   }
 
   

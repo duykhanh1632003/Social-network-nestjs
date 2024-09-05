@@ -55,6 +55,16 @@ export class FollowRepository  {
         .getCount();
   }
 
+  async cancelFollowing(follower: string, following: string): Promise<void> {
+    await this.followRepo
+      .createQueryBuilder('follow')
+      .leftJoinAndSelect('follow.follower', 'follower')
+      .leftJoinAndSelect('follow.following', 'following')
+      .where('follower.email = :follower AND following.email = :following', { follower, following })
+      .delete()
+      .execute()
+  }
+
   async getFollowerList(email: string, page: number, limit: number): Promise<UserListDto> {
     
     const query = this.followRepo.createQueryBuilder('follow').leftJoinAndSelect('follow.following', 'following').leftJoinAndSelect('follow.follower', 'user').where('following.email = :email', { email }).skip((page - 1) * limit).take(limit)
@@ -73,4 +83,29 @@ export class FollowRepository  {
     return { userList, total };
 
   }
+
+  async getFollowingList(email: string, page: number, limit: number): Promise<UserListDto> {
+    
+    const query = this.followRepo.createQueryBuilder('follow')
+      .leftJoinAndSelect('follow.follower', 'follower')
+      .leftJoinAndSelect('follow.following', 'user')
+      .where('follower.email = :email', { email })
+      .skip((page - 1) * limit)
+      .take(limit)
+
+    const [follows, total] = await query.getManyAndCount()
+
+    const userList: UserSimpleInfoIncludingStatusMessageDto[] = follows.map((follow: Follow) => {
+            const userInfo: UserSimpleInfoIncludingStatusMessageDto = new UserSimpleInfoIncludingStatusMessageDto();
+            userInfo.email = follow.follower.email;
+            userInfo.username = follow.follower.username;
+            userInfo.thumbnail = follow.follower.thumbnail;
+            userInfo.statusMessage = follow.follower.statusMessage;
+            return userInfo;
+        });
+
+    return { userList, total };
+
+  }
 } 
+

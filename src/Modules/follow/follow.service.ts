@@ -33,8 +33,16 @@ export class FollowService {
         return await this.followRepository.getFollowingCount(email);
     }
 
+    async cancelFollowing(follower: string, following: string): Promise<void> {
+        return await this.followRepository.cancelFollowing(follower, following);
+    }
+
     async getFollowerList(email: string,  page: number, limit: number): Promise<UserListDto> {
         return await this.followRepository.getFollowerList(email , page , limit);
+    }
+
+    async getFollowingList(email: string,  page: number, limit: number): Promise<UserListDto> {
+        return await this.followRepository.getFollowingList(email , page , limit);
     }
     
 }

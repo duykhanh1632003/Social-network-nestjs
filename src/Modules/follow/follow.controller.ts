@@ -67,6 +67,25 @@ export class FollowController {
   }
 
   @ApiResponse({
+    type: Number,
+    status: 200,
+    description: "Success"
+  })
+  @ApiQuery({
+    name: 'email',
+    description: `The email address of the following user to unfollow`,
+    required: true,
+})
+  @ApiOperation({ summary: `Unfollow the user` })
+  @Delete('/following/cancel')
+  cancelFollowing(
+    @GetUser() user: User,
+    @Query('email') email: string
+  ): Promise<void> {
+    return this.followService.cancelFollowing(user.email, email)
+  }
+
+  @ApiResponse({
     type: UserListDto,
     status: 200,
     description: 'SUccess'
@@ -94,6 +113,36 @@ export class FollowController {
     @Query('limit') limit: number
   ): Promise<UserListDto> {
     return this.followService.getFollowerList(email, page, limit);
+  }
+
+  @ApiResponse({
+    type: UserListDto,
+    status: 200,
+    description: 'SUccess'
+  })
+  @ApiQuery({
+    name: 'email',
+    description: `User's email address to fetch`,
+    required: true
+  })
+  @ApiProperty({
+    name: 'page',
+    description: `The page's number to call`,
+    required: true
+  })
+  @ApiProperty({
+    name: 'limit',
+    description: `The number of items on a single page`,
+    required: true
+  })
+  @ApiOperation({ summary: "Get follower list" })
+  @Get('/following')
+  getFollowingList(
+    @Query('email') email: string,
+    @Query('page') page: number,
+    @Query('limit') limit: number
+  ): Promise<UserListDto> {
+    return this.followService.getFollowingList(email, page, limit);
   }
 
   

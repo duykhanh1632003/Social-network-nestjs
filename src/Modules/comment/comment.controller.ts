@@ -1,10 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
 import { CommentService } from './comment.service';
-import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CommentInfoDto, CommentInfoListDto } from 'src/dto/comment/comment-info.dto';
 import { CreateCommentDto } from 'src/dto/comment/create-comment.dto';
 import { GetUser } from 'src/decorator/get-user.decorator';
 import { User } from 'src/db/entity/user.entity';
+import { UpdateCommentDto } from 'src/dto/comment/update-comment.dto';
 
 @Controller('comment')
 @ApiTags  ('Comment')
@@ -86,4 +87,37 @@ export class CommentController {
   ): Promise<CommentInfoListDto> {
       return this.commentService.getReplyListByParentCommentId(parentCommentId, postId, page, limit);
   }
+
+  @ApiResponse({
+    status: 201,
+    description: "Success"
+  })
+  @ApiBody({ type: UpdateCommentDto })
+  @ApiOperation({ summary: `Update the comment's content ` })
+  @Patch('/')
+  updateComment(
+    @Body() updateCommentDto: UpdateCommentDto,
+    @GetUser() user: User
+  ): Promise<CommentInfoDto> {
+    return this.commentService.updateComment(updateCommentDto, user)
+  }
+
+  @ApiResponse({
+        status: 200,
+        description: 'Success',
+    })
+    @ApiParam({
+      name: 'id',
+      required: true,
+      description: 'The comment ID to delete',
+    })
+    @ApiOperation({ summary: `Delete the comment by ID` })
+    @Delete('/:id')
+    deleteComment(
+        @Param('id', ParseIntPipe) id: number,
+        @GetUser() user: User,
+    ): Promise<void> {
+        return this.commentService.deleteComment(id, user);
+    }
+  
 }
